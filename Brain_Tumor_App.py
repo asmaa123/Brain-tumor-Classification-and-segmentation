@@ -3,16 +3,35 @@
 # -----------------------------
 import streamlit as st
 import cv2
+import os
 import numpy as np
 from tensorflow.keras.models import load_model
 import matplotlib.pyplot as plt
 import seaborn as sns
+import gdown
+# ---------------------------
+# Classification Model
+# ---------------------------
+clf_model_path = "efficient_tumor_model.keras"
+clf_file_id = "1jBOPWXdtNfhIOhmltyITqBdip_yynl11"
+clf_url = f"https://drive.google.com/uc?id={clf_file_id}"
 
-# -----------------------------
-# 🧠 Load Models
-# -----------------------------
-clf_model = load_model("efficient_tumor_model.keras")     # Classification
-seg_model = load_model("D:/tumor_segmentation/unet_brain_tumor.h5", compile=False)  # Segmentation
+if not os.path.exists(clf_model_path):
+    gdown.download(clf_url, clf_model_path, quiet=False)
+
+clf_model = load_model(clf_model_path)
+
+# ---------------------------
+# Segmentation Model
+# ---------------------------
+seg_model_path = "unet_brain_tumor.keras"
+seg_file_id = "1f4yAvSIs1rEroTuaBOPdbT3P6vySyFBR"
+seg_url = f"https://drive.google.com/uc?id={seg_file_id}"
+
+if not os.path.exists(seg_model_path):
+    gdown.download(seg_url, seg_model_path, quiet=False)
+
+seg_model = load_model(seg_model_path)
 
 # -----------------------------
 # 🖼️ Helper Functions
